@@ -11,6 +11,7 @@ import FileUpload from "./FileUpload";
 interface VideoFormData {
   title: string;
   description: string;
+  price: string;
   videoUrl: string;
   thumbnailUrl: string;
 }
@@ -29,6 +30,7 @@ export default function VideoUploadForm() {
     defaultValues: {
       title: "",
       description: "",
+      price: "",
       videoUrl: "",
       thumbnailUrl: "",
     },
@@ -52,12 +54,14 @@ export default function VideoUploadForm() {
 
     setLoading(true);
     try {
+      console.log("Form Data:", data);
       await apiClient.createVideo(data);
       showNotification("Video published successfully!", "success");
 
       // Reset form after successful submission
       setValue("title", "");
       setValue("description", "");
+      setValue("price", "");
       setValue("videoUrl", "");
       setValue("thumbnailUrl", "");
       setUploadProgress(0);
@@ -103,6 +107,25 @@ export default function VideoUploadForm() {
           </span>
         )}
       </div>
+
+      <div className="form-control">
+  <label className="label">Price</label>
+  <input
+    type="text"
+    placeholder="Enter price"
+    className={`input input-bordered ${errors.price ? "input-error" : ""}`}
+    {...register("price", {
+      required: "Price is required",
+      pattern: {
+        value: /^[0-9]+(\.[0-9]{1,2})?$/,
+        message: "Enter a valid number",
+      },
+    })}
+  />
+  {errors.price && (
+    <span className="text-error text-sm mt-1">{errors.price.message}</span>
+  )}
+</div>
 
       <div className="form-control">
         <label className="label">Upload Video</label>

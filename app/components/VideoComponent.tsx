@@ -1,10 +1,32 @@
 import { IKVideo } from "imagekitio-next";
 import Link from "next/link";
 import { IVideo } from "@/models/Video";
+import Script from "next/script";
 
 export default function VideoComponent({ video }: { video: IVideo }) {
+  const createOrder = async () => {
+    const res = await fetch('/api/createOrder', {
+      method: 'POST',
+      body: JSON.stringify({
+        amount: Number(video.price) * 100,
+      }),
+    })
+    const data = await res.json();
+    const paymentData = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      order_id: data.id,
+
+      handler: async function (response:any) {
+        //verify payment
+      }
+    }
+    const rzp = new (window as any).Razorpay(paymentData);
+    rzp.open();
+
+  };
   return (
     <div className="card bg-base-100 shadow hover:shadow-lg transition-all duration-300">
+      <Script type="text/javascript" src="https://checkout.razorpay.com/v1/checkout.js"/>
       <figure className="relative px-4 pt-4">
         <Link href={`/videos/${video._id}`} className="relative group w-full">
           <div
@@ -37,6 +59,11 @@ export default function VideoComponent({ video }: { video: IVideo }) {
         <p className="text-sm text-base-content/70 line-clamp-2">
           {video.description}
         </p>
+        <div className="flex items-center justify-between mt-2">
+        <h2 className="card-title text-lg">Price:{video.price}</h2>
+        <button className="btn btn-primary" onClick={createOrder}> Buy Now
+          </button>
+        </div>
       </div>
     </div>
   );

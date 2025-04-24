@@ -9,6 +9,7 @@ export interface IVideo {
   _id?: mongoose.Types.ObjectId;
   title: string;
   description: string;
+  price:string;
   videoUrl: string;
   thumbnailUrl: string;
   controls?: boolean;
@@ -23,6 +24,7 @@ const videoSchema = new Schema<IVideo>(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
+    price: { type: String, required: true },
     videoUrl: { type: String, required: true },
     thumbnailUrl: { type: String, required: true },
     controls: { type: Boolean, default: true },

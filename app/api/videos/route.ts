@@ -33,10 +33,12 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase();
     const body: IVideo = await request.json();
+    console.log("Received Body:", body);
 
     // Validate required fields
     if (
       !body.title ||
+      !body.price ||
       !body.description ||
       !body.videoUrl ||
       !body.thumbnailUrl
