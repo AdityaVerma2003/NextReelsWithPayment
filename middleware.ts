@@ -20,7 +20,7 @@ export default withAuth(
         }
 
         // Public routes
-        if (pathname === "/" || pathname.startsWith("/api/videos") || pathname.startsWith("/api/createOrder")) {
+        if (pathname === "/" || pathname.startsWith("/api/videos") || pathname.startsWith("/api/createOrder") || pathname.startsWith("/api/send")) {
           return true;
         }
         // All other routes require authentication

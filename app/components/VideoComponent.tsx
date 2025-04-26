@@ -2,27 +2,62 @@ import { IKVideo } from "imagekitio-next";
 import Link from "next/link";
 import { IVideo } from "@/models/Video";
 import Script from "next/script";
+import { useNotification } from "../components/Notification";
 
 export default function VideoComponent({ video }: { video: IVideo }) {
+  const { showNotification } = useNotification();
   const createOrder = async () => {
     const res = await fetch('/api/createOrder', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // ✅ important header
+      },
       body: JSON.stringify({
         amount: Number(video.price) * 100,
       }),
-    })
+    });
+  
     const data = await res.json();
     const paymentData = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      order_id: data.id,
+      order_id: data.order.id,
+      handler: function (response: any) {
+        showNotification("Payment Successful", "success");
+        showNotification("Payment ID: " + response.razorpay_payment_id, "success");
 
-      handler: async function (response:any) {
-        //verify payment
-      }
-    }
+        // Async IIFE for await usage
+        (async () => {
+          try {
+            const emailRes = await fetch("/api/successPayment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id,
+                signature: response.razorpay_signature,
+              }),
+            });
+
+            const emailData = await emailRes.json();
+            if (emailRes.ok) {
+              showNotification("Email sent successfully", "success");
+            } else {
+              showNotification("Email failed: " + emailData.error, "error");
+            }
+          } catch (error) {
+            showNotification("Failed to notify server about payment", "error");
+            console.error("Email error:", error);
+          }
+        })();
+      },
+      theme: {
+        color: "#6366f1",
+      },
+    };
     const rzp = new (window as any).Razorpay(paymentData);
     rzp.open();
-
   };
   return (
     <div className="card bg-base-100 shadow hover:shadow-lg transition-all duration-300">

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
+import { sendVerificationEmail } from "@/app/helpers/sendVerificationEmail";
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,11 +29,24 @@ export async function POST(request: NextRequest) {
       email,
       password,
     });
+   
+    // Send verification email and capture the response
+    const emailResponse = await sendVerificationEmail(email);
 
+    if (!emailResponse.ok) {
+      const errorData = await emailResponse.json();
+      console.error("Email sending failed:", errorData);
+
+      return NextResponse.json(
+        { error: "User created, but verification email failed to send", details: errorData },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
       { message: "User registered successfully" },
       { status: 201 }
     );
+
   } catch (error) {
     console.error("Registration error:", error);
     return NextResponse.json(
