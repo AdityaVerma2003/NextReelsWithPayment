@@ -46,7 +46,6 @@ npm install
 ```
 
 3. Configure environment variables:
-   - Copy `.env.example` to `.env`
    - Fill in the required environment variables
 
 4. Run the development server:
@@ -77,12 +76,7 @@ IMAGEKIT_URL_ENDPOINT=
 RAZORPAY_KEY_ID=
 RAZORPAY_KEY_SECRET=
 
-# Email (SMTP)
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-```
+
 
 ## Available Scripts
 
@@ -107,15 +101,3 @@ SMTP_PASS=
 ├── public/            # Static assets
 └── types.d.ts         # TypeScript declarations
 ```
-
-## Contributing
-
-NO CONTRIBUTING PLEASE!
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support, watch youtube video
