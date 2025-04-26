@@ -21,16 +21,9 @@ A modern Next.js application for managing and selling video content using ImageK
 - **Database**: MongoDB with Mongoose
 - **File Storage**: ImageKit
 - **Payment**: Razorpay
-- **Email**: Nodemailer
+- **Email**: ResendMail
 - **Form Handling**: React Hook Form
 
-## Prerequisites
-
-- Node.js (Latest LTS version)
-- MongoDB Database
-- ImageKit Account
-- Razorpay Account
-- SMTP Server (for email notifications)
 
 ## Getting Started
 
@@ -87,17 +80,4 @@ RAZORPAY_KEY_SECRET=
 - `npm run seed` - Seed the database
 - `npm run mailtrap` - Test email configuration
 
-## Project Structure
 
-```
-├── app/                  # Next.js app directory
-│   ├── api/             # API routes
-│   ├── components/      # Reusable components
-│   ├── login/          # Login page
-│   ├── register/       # Registration page
-│   └── upload/         # Video upload page
-├── lib/                # Utility functions
-├── models/             # MongoDB models
-├── public/            # Static assets
-└── types.d.ts         # TypeScript declarations
-```
